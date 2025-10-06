@@ -38,7 +38,7 @@ reminders.csv
 instance/
 
 # Environment variables
-.env
+# .env
 .env.local
 .env.production
 
