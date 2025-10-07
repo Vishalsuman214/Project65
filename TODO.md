@@ -2,6 +2,7 @@
 
 ## Tasks
 - [x] Change SMTP from SSL (465) to TLS (587) in all email functions
+- [x] Switch all email sending to use SendGrid API instead of SMTP
 - [x] Update send_reminder_email in email_service.py
 - [x] Update send_test_email in email_service.py
 - [x] Update send_password_reset_email in email_service.py
