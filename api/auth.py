@@ -67,7 +67,8 @@ def send_reset_email(email, token, user_name='User'):
 
         if SYSTEM_SENDER_EMAIL and SYSTEM_APP_PASSWORD:
             # Use Gmail SMTP
-            server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
+            server = smtplib.SMTP("smtp.gmail.com", 587)
+            server.starttls()
             server.login(SYSTEM_SENDER_EMAIL, SYSTEM_APP_PASSWORD)
             server.sendmail(SYSTEM_SENDER_EMAIL, email, msg.as_string())
             server.quit()
@@ -110,7 +111,8 @@ def send_verification_email_to_credentials(email, app_password):
         msg.attach(MIMEText(body, "plain"))
 
         # Use user provided credentials to send the email
-        server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.starttls()
         server.login(email, app_password)
         server.sendmail(email, email, msg.as_string())
         server.quit()

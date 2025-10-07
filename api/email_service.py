@@ -60,7 +60,8 @@ def send_reminder_email(receiver_email, reminder_title, reminder_description, re
         msg.attach(MIMEText(body, "plain"))
 
         # Connect to Gmail SMTP server
-        server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.starttls()
         server.login(sender_email, app_password)
 
         # Send email
@@ -97,7 +98,8 @@ def send_test_email(sender_email, app_password, test_recipient_email):
         msg.attach(MIMEText(body, "plain"))
 
         # Connect to Gmail SMTP server
-        server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.starttls()
         server.login(sender_email, app_password)
 
         # Send email
@@ -222,7 +224,8 @@ def send_password_reset_email(user_email, reset_token, user_name):
 
         if SYSTEM_SENDER_EMAIL and SYSTEM_APP_PASSWORD:
             # Use Gmail SMTP
-            server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
+            server = smtplib.SMTP("smtp.gmail.com", 587)
+            server.starttls()
             server.login(SYSTEM_SENDER_EMAIL, SYSTEM_APP_PASSWORD)
             server.sendmail(SYSTEM_SENDER_EMAIL, user_email, msg.as_string())
             server.quit()
@@ -270,7 +273,8 @@ def send_email_confirmation_otp(user_email, otp, user_name):
 
         if SYSTEM_SENDER_EMAIL and SYSTEM_APP_PASSWORD:
             # Use Gmail SMTP
-            server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
+            server = smtplib.SMTP("smtp.gmail.com", 587)
+            server.starttls()
             server.login(SYSTEM_SENDER_EMAIL, SYSTEM_APP_PASSWORD)
             server.sendmail(SYSTEM_SENDER_EMAIL, user_email, msg.as_string())
             server.quit()

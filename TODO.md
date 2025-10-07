@@ -1,7 +1,11 @@
-# TODO: Add Email Credentials to Profile Page
+# TODO: Fix Email Sending on Deployment
 
 ## Tasks
-- [x] Update profile route in auth.py to fetch email_credentials and app_password
-- [x] Update profile.html to display and edit email credentials
-- [x] Update profile POST handling to save email credentials
-- [x] Test profile page with email credentials
+- [x] Change SMTP from SSL (465) to TLS (587) in all email functions
+- [x] Update send_reminder_email in email_service.py
+- [x] Update send_test_email in email_service.py
+- [x] Update send_password_reset_email in email_service.py
+- [x] Update send_email_confirmation_otp in email_service.py
+- [x] Update send_reset_email in auth.py
+- [x] Update send_verification_email_to_credentials in auth.py
+- [x] Test email sending on deployment

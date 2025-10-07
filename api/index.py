@@ -27,6 +27,17 @@ def create_app():
         print(f"❌ Missing required environment variables: {', '.join(missing_vars)}", file=sys.stderr)
         sys.exit(1)
 
+    @app.errorhandler(404)
+    def not_found(e):
+        return jsonify(error="Not found"), 404
+
+    @app.errorhandler(500)
+    def internal_error(e):
+        # Log the error and return JSON response
+        import traceback
+        traceback.print_exc()
+        return jsonify(error=str(e)), 500
+
     @app.errorhandler(Exception)
     def handle_exception(e):
         # Log the error and return JSON response
@@ -62,6 +73,10 @@ def create_app():
     @app.route('/')
     def home():
         return redirect(url_for('auth.login'))
+
+    @app.route('/favicon.ico')
+    def favicon():
+        return '', 404
 
     @app.route('/cron/reminders')
     def cron_reminders():
