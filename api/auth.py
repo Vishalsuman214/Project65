@@ -251,7 +251,8 @@ def profile():
             file = request.files['profile_picture']
             if file.filename != '':
                 filename = secure_filename(file.filename)
-                upload_folder = os.path.join(current_app.root_path, 'static', 'uploads')
+                # Use /tmp for uploads on deployment (Vercel/Lambda has read-only file system)
+                upload_folder = '/tmp/uploads'
                 os.makedirs(upload_folder, exist_ok=True)
                 file_path = os.path.join(upload_folder, filename)
                 file.save(file_path)
