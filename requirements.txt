@@ -6,3 +6,4 @@ apscheduler
 email-validator
 python-dotenv
 gunicorn
+sendgrid

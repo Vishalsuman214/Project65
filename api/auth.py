@@ -36,15 +36,12 @@ def send_verification_email(email, token):
         return False
 
 def send_reset_email(email, token, user_name='User'):
+    from sendgrid import SendGridAPIClient
+    from sendgrid.helpers.mail import Mail, Email, To, Content
     try:
-        SYSTEM_SENDER_EMAIL = os.environ.get('SYSTEM_SENDER_EMAIL')
-        SYSTEM_APP_PASSWORD = os.environ.get('SYSTEM_APP_PASSWORD')
+        SYSTEM_SENDER_EMAIL = os.environ.get('SYSTEM_SENDER_EMAIL') or "noreply@reminderapp.local"
 
-        msg = MIMEMultipart()
-        msg["From"] = SYSTEM_SENDER_EMAIL or "noreply@reminderapp.local"
-        msg["To"] = email
-        msg["Subject"] = "Password Reset for Reminder App"
-
+        api_key = os.environ.get('SENDGRID_API_KEY')
         base_url = os.environ.get('BASE_URL', 'http://localhost:5000')
         reset_link = f"{base_url.rstrip('/')}/reset-password?token={token}"
         body = f"""
@@ -63,23 +60,20 @@ def send_reset_email(email, token, user_name='User'):
         This is an automated email from the Reminder App.
         """
 
-        msg.attach(MIMEText(body, "plain"))
-
-        if SYSTEM_SENDER_EMAIL and SYSTEM_APP_PASSWORD:
-            # Use Gmail SMTP
-            server = smtplib.SMTP("smtp.gmail.com", 587)
-            server.starttls()
-            server.login(SYSTEM_SENDER_EMAIL, SYSTEM_APP_PASSWORD)
-            server.sendmail(SYSTEM_SENDER_EMAIL, email, msg.as_string())
-            server.quit()
+        if api_key:
+            sg = SendGridAPIClient(api_key)
+            from_email = Email(SYSTEM_SENDER_EMAIL)
+            to_email = To(email)
+            subject = "Password Reset for Reminder App"
+            content = Content("text/plain", body)
+            mail = Mail(from_email, to_email, subject, content)
+            response = sg.send(mail)
             print(f"✅ Password reset email sent to {email}")
         else:
             # Fallback for development: log email content to console
-            print("⚠️ System email credentials not set, logging email content for development")
-            print(f"   SYSTEM_SENDER_EMAIL: {'set' if SYSTEM_SENDER_EMAIL else 'not set'}")
-            print(f"   SYSTEM_APP_PASSWORD: {'set' if SYSTEM_APP_PASSWORD else 'not set'}")
+            print("⚠️ SENDGRID_API_KEY not set, logging email content for development")
             print(f"📧 Password reset email for {email}:")
-            print(f"Subject: {msg['Subject']}")
+            print(f"Subject: Password Reset for Reminder App")
             print(f"Body:\n{body}")
             print(f"Reset Link: {reset_link}")
             print("✅ Password reset email logged (copy the link above to reset password)")
@@ -91,13 +85,33 @@ def send_reset_email(email, token, user_name='User'):
         return False
 
 def send_verification_email_to_credentials(email, app_password):
+    from sendgrid import SendGridAPIClient
+    from sendgrid.helpers.mail import Mail, Email, To, Content
     try:
-        msg = MIMEMultipart()
-        msg["From"] = email
-        msg["To"] = email
-        msg["Subject"] = "Email Credentials Verification"
+        api_key = os.environ.get('SENDGRID_API_KEY')
+        if not api_key:
+            print("❌ SENDGRID_API_KEY not set, logging verification email content for development")
+            body = """
+            Hello!
 
-        body = """
+            This is a test email from the Reminder App to verify your email credentials are working correctly.
+
+            If you received this email, your settings are configured properly.
+
+            ---
+            This is an automated test email from the Reminder App.
+            """
+            print(f"📧 Verification email for {email}:")
+            print(f"Subject: Email Credentials Verification")
+            print(f"Body:\n{body}")
+            print("✅ Verification email logged")
+            return True
+
+        sg = SendGridAPIClient(api_key)
+        from_email = Email(email)
+        to_email = To(email)
+        subject = "Email Credentials Verification"
+        content = Content("text/plain", """
         Hello!
 
         This is a test email from the Reminder App to verify your email credentials are working correctly.
@@ -106,16 +120,9 @@ def send_verification_email_to_credentials(email, app_password):
 
         ---
         This is an automated test email from the Reminder App.
-        """
-
-        msg.attach(MIMEText(body, "plain"))
-
-        # Use user provided credentials to send the email
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.starttls()
-        server.login(email, app_password)
-        server.sendmail(email, email, msg.as_string())
-        server.quit()
+        """)
+        mail = Mail(from_email, to_email, subject, content)
+        response = sg.send(mail)
 
         print(f"✅ Verification email sent to {email}")
         return True

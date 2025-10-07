@@ -1,10 +1,9 @@
-import smtplib
 import os
 import sys
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 from datetime import datetime
 import concurrent.futures
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail, Email, To, Content
 
 # Add project directory to path for imports when running as script
 sys.path.insert(0, 'py-project')
@@ -20,31 +19,46 @@ DEFAULT_APP_PASSWORD = None
 # Load from environment variables inside functions for dynamic updates
 
 def send_reminder_email(receiver_email, reminder_title, reminder_description, reminder_time, user_id=None):
-    """Send a reminder email to the specified recipient"""
+    """Send a reminder email to the specified recipient using SendGrid"""
     try:
         # Get user-specific credentials, no defaults
         if user_id:
             user = get_user_by_id(user_id)
             sender_email = user.get('email_credentials') if user else None
-            app_password = user.get('app_password') if user else None
         else:
             sender_email = None
-            app_password = None
 
         # Check if credentials are set
-        if not sender_email or not app_password:
+        if not sender_email:
             print(f"❌ Email credentials not set for user {user_id}. Please set email credentials in settings.")
-            print(f"   sender_email: {'set' if sender_email else 'not set'}")
-            print(f"   app_password: {'set' if app_password else 'not set'}")
             return False
 
-        # Create email
-        msg = MIMEMultipart()
-        msg["From"] = sender_email
-        msg["To"] = receiver_email
-        msg["Subject"] = f"Reminder: {reminder_title}"
+        api_key = os.environ.get('SENDGRID_API_KEY')
+        if not api_key:
+            print("❌ SENDGRID_API_KEY not set, logging email content for development")
+            body = f"""
+            Hello!
 
-        body = f"""
+            This is a reminder for: {reminder_title}
+
+            Description: {reminder_description or 'No description provided'}
+
+            Scheduled Time: {reminder_time.strftime('%Y-%m-%d %H:%M')}
+
+            ---
+            This is an automated reminder from the Reminder App.
+            """
+            print(f"📧 Reminder email for {receiver_email}:")
+            print(f"Subject: Reminder: {reminder_title}")
+            print(f"Body:\n{body}")
+            print("✅ Reminder email logged")
+            return True
+
+        sg = SendGridAPIClient(api_key)
+        from_email = Email(sender_email)
+        to_email = To(receiver_email)
+        subject = f"Reminder: {reminder_title}"
+        content = Content("text/plain", f"""
         Hello!
 
         This is a reminder for: {reminder_title}
@@ -55,18 +69,9 @@ def send_reminder_email(receiver_email, reminder_title, reminder_description, re
 
         ---
         This is an automated reminder from the Reminder App.
-        """
-
-        msg.attach(MIMEText(body, "plain"))
-
-        # Connect to Gmail SMTP server
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.starttls()
-        server.login(sender_email, app_password)
-
-        # Send email
-        server.sendmail(sender_email, receiver_email, msg.as_string())
-        server.quit()
+        """)
+        mail = Mail(from_email, to_email, subject, content)
+        response = sg.send(mail)
 
         print(f"✅ Email sent successfully to {receiver_email}")
         return True
@@ -75,16 +80,33 @@ def send_reminder_email(receiver_email, reminder_title, reminder_description, re
         print(f"❌ Error sending email to {receiver_email}: {e}")
         return False
 
-def send_test_email(sender_email, app_password, test_recipient_email):
-    """Send a test email to verify credentials"""
+def send_test_email(sender_email, test_recipient_email):
+    """Send a test email to verify credentials using SendGrid"""
     try:
-        # Create test email
-        msg = MIMEMultipart()
-        msg["From"] = sender_email
-        msg["To"] = test_recipient_email
-        msg["Subject"] = "Test Email from Reminder App"
+        api_key = os.environ.get('SENDGRID_API_KEY')
+        if not api_key:
+            print("❌ SENDGRID_API_KEY not set, logging test email content for development")
+            body = """
+            Hello!
 
-        body = """
+            This is a test email from the Reminder App to verify your email credentials are working correctly.
+
+            If you received this email, your settings are configured properly.
+
+            ---
+            This is an automated test email from the Reminder App.
+            """
+            print(f"📧 Test email for {test_recipient_email}:")
+            print(f"Subject: Test Email from Reminder App")
+            print(f"Body:\n{body}")
+            print("✅ Test email logged")
+            return True
+
+        sg = SendGridAPIClient(api_key)
+        from_email = Email(sender_email)
+        to_email = To(test_recipient_email)
+        subject = "Test Email from Reminder App"
+        content = Content("text/plain", """
         Hello!
 
         This is a test email from the Reminder App to verify your email credentials are working correctly.
@@ -93,18 +115,9 @@ def send_test_email(sender_email, app_password, test_recipient_email):
 
         ---
         This is an automated test email from the Reminder App.
-        """
-
-        msg.attach(MIMEText(body, "plain"))
-
-        # Connect to Gmail SMTP server
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.starttls()
-        server.login(sender_email, app_password)
-
-        # Send email
-        server.sendmail(sender_email, test_recipient_email, msg.as_string())
-        server.quit()
+        """)
+        mail = Mail(from_email, to_email, subject, content)
+        response = sg.send(mail)
 
         print(f"✅ Test email sent successfully to {test_recipient_email}")
         return True
@@ -192,16 +205,11 @@ def send_reminder_and_mark(reminder, recipient_email, reminder_time, user):
         print(f"❌ Failed to send reminder '{reminder['title']}' to {recipient_email}")
 
 def send_password_reset_email(user_email, reset_token, user_name):
-    """Send password reset email with link"""
+    """Send password reset email with link using SendGrid"""
     try:
-        SYSTEM_SENDER_EMAIL = os.environ.get('SYSTEM_SENDER_EMAIL')
-        SYSTEM_APP_PASSWORD = os.environ.get('SYSTEM_APP_PASSWORD')
+        SYSTEM_SENDER_EMAIL = os.environ.get('SYSTEM_SENDER_EMAIL') or "noreply@reminderapp.local"
 
-        msg = MIMEMultipart()
-        msg["From"] = SYSTEM_SENDER_EMAIL or "noreply@reminderapp.local"
-        msg["To"] = user_email
-        msg["Subject"] = "Password Reset for Reminder App"
-
+        api_key = os.environ.get('SENDGRID_API_KEY')
         base_url = os.environ.get('BASE_URL', 'http://localhost:5000')
         reset_link = f"{base_url.rstrip('/')}/reset-password?token={reset_token}"
         body = f"""
@@ -220,23 +228,20 @@ def send_password_reset_email(user_email, reset_token, user_name):
         This is an automated email from the Reminder App.
         """
 
-        msg.attach(MIMEText(body, "plain"))
-
-        if SYSTEM_SENDER_EMAIL and SYSTEM_APP_PASSWORD:
-            # Use Gmail SMTP
-            server = smtplib.SMTP("smtp.gmail.com", 587)
-            server.starttls()
-            server.login(SYSTEM_SENDER_EMAIL, SYSTEM_APP_PASSWORD)
-            server.sendmail(SYSTEM_SENDER_EMAIL, user_email, msg.as_string())
-            server.quit()
+        if api_key:
+            sg = SendGridAPIClient(api_key)
+            from_email = Email(SYSTEM_SENDER_EMAIL)
+            to_email = To(user_email)
+            subject = "Password Reset for Reminder App"
+            content = Content("text/plain", body)
+            mail = Mail(from_email, to_email, subject, content)
+            response = sg.send(mail)
             print(f"✅ Password reset email sent to {user_email}")
         else:
             # Fallback for development: log email content to console
-            print("⚠️ System email credentials not set, logging email content for development")
-            print(f"   SYSTEM_SENDER_EMAIL: {'set' if SYSTEM_SENDER_EMAIL else 'not set'}")
-            print(f"   SYSTEM_APP_PASSWORD: {'set' if SYSTEM_APP_PASSWORD else 'not set'}")
+            print("⚠️ SENDGRID_API_KEY not set, logging email content for development")
             print(f"📧 Password reset email for {user_email}:")
-            print(f"Subject: {msg['Subject']}")
+            print(f"Subject: Password Reset for Reminder App")
             print(f"Body:\n{body}")
             print(f"Reset Link: {reset_link}")
             print("✅ Password reset email logged (copy the link above to reset password)")
@@ -248,16 +253,11 @@ def send_password_reset_email(user_email, reset_token, user_name):
         return False
 
 def send_email_confirmation_otp(user_email, otp, user_name):
-    """Send email confirmation OTP"""
+    """Send email confirmation OTP using SendGrid"""
     try:
-        SYSTEM_SENDER_EMAIL = os.environ.get('SYSTEM_SENDER_EMAIL')
-        SYSTEM_APP_PASSWORD = os.environ.get('SYSTEM_APP_PASSWORD')
+        SYSTEM_SENDER_EMAIL = os.environ.get('SYSTEM_SENDER_EMAIL') or "noreply@reminderapp.local"
 
-        msg = MIMEMultipart()
-        msg["From"] = SYSTEM_SENDER_EMAIL or "noreply@reminderapp.local"
-        msg["To"] = user_email
-        msg["Subject"] = "Email Confirmation Code for Reminder App"
-
+        api_key = os.environ.get('SENDGRID_API_KEY')
         body = f"""
         Hello {user_name},
 
@@ -269,23 +269,20 @@ def send_email_confirmation_otp(user_email, otp, user_name):
         This is an automated email from the Reminder App.
         """
 
-        msg.attach(MIMEText(body, "plain"))
-
-        if SYSTEM_SENDER_EMAIL and SYSTEM_APP_PASSWORD:
-            # Use Gmail SMTP
-            server = smtplib.SMTP("smtp.gmail.com", 587)
-            server.starttls()
-            server.login(SYSTEM_SENDER_EMAIL, SYSTEM_APP_PASSWORD)
-            server.sendmail(SYSTEM_SENDER_EMAIL, user_email, msg.as_string())
-            server.quit()
+        if api_key:
+            sg = SendGridAPIClient(api_key)
+            from_email = Email(SYSTEM_SENDER_EMAIL)
+            to_email = To(user_email)
+            subject = "Email Confirmation Code for Reminder App"
+            content = Content("text/plain", body)
+            mail = Mail(from_email, to_email, subject, content)
+            response = sg.send(mail)
             print(f"✅ OTP email sent to {user_email}")
         else:
             # Fallback for development: log email content to console
-            print("⚠️ System email credentials not set, logging email content for development")
-            print(f"   SYSTEM_SENDER_EMAIL: {'set' if SYSTEM_SENDER_EMAIL else 'not set'}")
-            print(f"   SYSTEM_APP_PASSWORD: {'set' if SYSTEM_APP_PASSWORD else 'not set'}")
+            print("⚠️ SENDGRID_API_KEY not set, logging email content for development")
             print(f"📧 OTP email for {user_email}:")
-            print(f"Subject: {msg['Subject']}")
+            print(f"Subject: Email Confirmation Code for Reminder App")
             print(f"Body:\n{body}")
             print("✅ OTP email logged (use the OTP above for confirmation)")
 
