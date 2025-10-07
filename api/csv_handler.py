@@ -4,7 +4,12 @@ import os
 import uuid
 import datetime
 
-USERS_CSV = os.path.join(os.path.dirname(__file__), '..', 'data', 'users.csv')
+if os.environ.get('VERCEL'):
+    USERS_CSV = '/tmp/users.csv'
+    REMINDERS_CSV = '/tmp/reminders.csv'
+else:
+    USERS_CSV = os.path.join(os.path.dirname(__file__), '..', 'data', 'users.csv')
+    REMINDERS_CSV = os.path.join(os.path.dirname(__file__), '..', 'data', 'reminders.csv')
 
 def read_users():
     users = []
@@ -179,7 +184,6 @@ def reset_password(token, new_password):
 
 # Reminder functions
 def get_all_reminders():
-    REMINDERS_CSV = os.path.join(os.path.dirname(__file__), '..', 'data', 'reminders.csv')
     if not os.path.exists(REMINDERS_CSV):
         return []
     with open(REMINDERS_CSV, 'r', encoding='utf-8') as f:
@@ -187,7 +191,6 @@ def get_all_reminders():
         return list(reader)
 
 def mark_reminder_completed(reminder_id):
-    REMINDERS_CSV = os.path.join(os.path.dirname(__file__), '..', 'data', 'reminders.csv')
     if not os.path.exists(REMINDERS_CSV):
         return False
     reminders = []
@@ -211,7 +214,6 @@ def mark_reminder_completed(reminder_id):
     return False
 
 def add_reminder(user_id, title, description, reminder_time, recipient_email):
-    REMINDERS_CSV = os.path.join(os.path.dirname(__file__), '..', 'data', 'reminders.csv')
     reminder_id = str(uuid.uuid4())
     new_reminder = {
         'id': reminder_id,
@@ -236,7 +238,6 @@ def add_reminder(user_id, title, description, reminder_time, recipient_email):
     return reminder_id
 
 def get_reminders_by_user_id(user_id):
-    REMINDERS_CSV = os.path.join(os.path.dirname(__file__), '..', 'data', 'reminders.csv')
     if not os.path.exists(REMINDERS_CSV):
         return []
     with open(REMINDERS_CSV, 'r', encoding='utf-8') as f:
@@ -244,7 +245,6 @@ def get_reminders_by_user_id(user_id):
         return [reminder for reminder in reader if reminder['user_id'] == user_id]
 
 def get_reminder_by_id(reminder_id):
-    REMINDERS_CSV = os.path.join(os.path.dirname(__file__), '..', 'data', 'reminders.csv')
     if not os.path.exists(REMINDERS_CSV):
         return None
     with open(REMINDERS_CSV, 'r', encoding='utf-8') as f:
@@ -255,7 +255,6 @@ def get_reminder_by_id(reminder_id):
     return None
 
 def update_reminder(reminder_id, title=None, description=None, reminder_time=None, recipient_email=None, is_completed=None):
-    REMINDERS_CSV = os.path.join(os.path.dirname(__file__), '..', 'data', 'reminders.csv')
     if not os.path.exists(REMINDERS_CSV):
         return False
     reminders = []
@@ -289,7 +288,6 @@ def update_reminder(reminder_id, title=None, description=None, reminder_time=Non
     return False
 
 def delete_reminder(reminder_id):
-    REMINDERS_CSV = os.path.join(os.path.dirname(__file__), '..', 'data', 'reminders.csv')
     if not os.path.exists(REMINDERS_CSV):
         return False
     reminders = []
