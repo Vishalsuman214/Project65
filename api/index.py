@@ -13,6 +13,13 @@ from api.auth import User, mail
 from api.csv_handler import get_user_by_id
 from api.email_service import check_and_send_reminders
 
+# Load environment variables from .env file if it exists
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass  # python-dotenv not installed, skip loading .env
+
 # Initialize extensions
 login_manager = LoginManager()
 
