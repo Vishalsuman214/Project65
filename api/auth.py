@@ -11,7 +11,7 @@ import sys
 # Add project directory to path for imports when running as script
 sys.path.insert(0, 'py-project')
 
-from api.csv_handler import add_user, get_user_by_email, get_user_by_id, verify_password, generate_verification_token, set_verification_token, verify_email, generate_reset_token, set_reset_token, reset_password, update_user_email_credentials
+from api.csv_handler import add_user, get_user_by_email, get_user_by_id, verify_password, generate_verification_token, set_verification_token, verify_email, generate_reset_token, set_reset_token, reset_password, update_user_email_credentials, update_user_profile_picture, update_user_bio, update_user_password
 
 # System email credentials (loaded inside functions for dynamic updates)
 
