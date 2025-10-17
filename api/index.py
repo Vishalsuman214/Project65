@@ -72,6 +72,10 @@ def create_app():
     app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
     app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_DEFAULT_SENDER', app.config['MAIL_USERNAME'])
 
+    # Session configuration to prevent automatic logout
+    app.config['PERMANENT_SESSION_LIFETIME'] = 30 * 24 * 60 * 60  # 30 days
+    app.config['SESSION_PERMANENT'] = True
+
     # Initialize extensions with app
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'

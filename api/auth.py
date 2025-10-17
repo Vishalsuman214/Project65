@@ -208,7 +208,7 @@ def login():
                 password_hash=user_data['password_hash']
             )
 
-            login_user(user)
+            login_user(user, remember=True)  # Enable remember me for persistent sessions
             return redirect(url_for('reminders.dashboard'))
         else:
             flash('Invalid email or password', 'error')
