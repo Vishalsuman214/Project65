@@ -6,8 +6,5 @@ apscheduler
 email-validator
 python-dotenv
 gunicorn
-<<<<<<< HEAD
 pymongo
-=======
->>>>>>> 5b91f90d25f41871fc3f227bf00417e8457cd3d6
 sendgrid
