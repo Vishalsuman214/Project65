@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
+<<<<<<< HEAD
             background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
             background-size: 400% 400%;
             animation: gradientShift 15s ease infinite;
@@ -50,6 +51,21 @@
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
+=======
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 2rem 0;
+        }
+        .create-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+>>>>>>> 5b91f90d25f41871fc3f227bf00417e8457cd3d6
         }
         .create-header {
             text-align: center;
@@ -57,6 +73,7 @@
             color: #333;
         }
         .create-header h1 {
+<<<<<<< HEAD
             font-weight: 700;
             margin-bottom: 0.5rem;
             background: linear-gradient(135deg, #667eea, #764ba2);
@@ -92,11 +109,27 @@
             box-shadow: 0 0 0 0.3rem rgba(102, 126, 234, 0.15), 0 0 20px rgba(102, 126, 234, 0.3);
             transform: scale(1.02);
             background: rgba(255, 255, 255, 1);
+=======
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #667eea;
+        }
+        .form-control {
+            border-radius: 8px;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+>>>>>>> 5b91f90d25f41871fc3f227bf00417e8457cd3d6
         }
         .form-label {
             font-weight: 600;
             color: #333;
             margin-bottom: 0.5rem;
+<<<<<<< HEAD
             animation: fadeIn 0.8s ease-out both;
         }
         .form-label:nth-child(1) { animation-delay: 0.1s; }
@@ -176,10 +209,45 @@
             color: white;
             text-decoration: none;
             filter: brightness(1.1);
+=======
+        }
+        .btn-create {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .btn-create:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        .btn-back {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        .btn-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+            color: white;
+            text-decoration: none;
+>>>>>>> 5b91f90d25f41871fc3f227bf00417e8457cd3d6
         }
         .form-group {
             margin-bottom: 1.5rem;
         }
+<<<<<<< HEAD
         @media (prefers-reduced-motion: reduce) {
             * {
                 animation-duration: 0.01ms !important;
@@ -187,6 +255,8 @@
                 transition-duration: 0.01ms !important;
             }
         }
+=======
+>>>>>>> 5b91f90d25f41871fc3f227bf00417e8457cd3d6
     </style>
 </head>
 <body>
@@ -195,6 +265,7 @@
             <h1><i class="fas fa-plus-circle me-2"></i>Create New Reminder</h1>
             <p>Fill in the details to create a new reminder</p>
         </div>
+<<<<<<< HEAD
 
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
@@ -208,6 +279,10 @@
         {% endwith %}
 
         <form method="POST" enctype="multipart/form-data" id="reminderForm">
+=======
+        
+        <form method="POST" enctype="multipart/form-data">
+>>>>>>> 5b91f90d25f41871fc3f227bf00417e8457cd3d6
             <div class="form-group">
                 <label class="form-label">Reminder Title</label>
                 <input type="text" name="title" class="form-control" placeholder="Enter reminder title" required>
@@ -233,7 +308,11 @@
                 <input type="file" name="attachment" class="form-control" accept="*/*">
             </div>
             
+<<<<<<< HEAD
             <button type="submit" class="btn-create mb-3" id="submitBtn">
+=======
+            <button type="submit" class="btn-create mb-3">
+>>>>>>> 5b91f90d25f41871fc3f227bf00417e8457cd3d6
                 <i class="fas fa-save me-2"></i>Create Reminder
             </button>
         </form>
@@ -244,6 +323,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<<<<<<< HEAD
     <script>
         // Form validation and loading state
         const form = document.getElementById('reminderForm');
@@ -295,5 +375,7 @@
             this.style.height = this.scrollHeight + 'px';
         });
     </script>
+=======
+>>>>>>> 5b91f90d25f41871fc3f227bf00417e8457cd3d6
 </body>
 </html>

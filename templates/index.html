@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
+<<<<<<< HEAD
             background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
             background-size: 400% 400%;
             animation: gradientShift 20s ease infinite;
@@ -180,34 +181,126 @@
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(23, 162, 184, 0.4);
             filter: brightness(1.1);
+=======
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .navbar-custom {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+        .dashboard-container {
+            padding: 2rem 0;
+        }
+        .welcome-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+            padding: 1.5rem;
+            font-weight: 600;
+        }
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        .btn-success-custom {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-success-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+        .btn-info-custom {
+            background: linear-gradient(135deg, #17a2b8 0%, #6f42c1 100%);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-info-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(23, 162, 184, 0.3);
+>>>>>>> 5b91f90d25f41871fc3f227bf00417e8457cd3d6
         }
         .btn-outline-danger-custom {
             border: 2px solid #dc3545;
             color: #dc3545;
+<<<<<<< HEAD
             padding: 8px 16px;
             border-radius: 8px;
             font-weight: 500;
             transition: all 0.3s ease;
             background: transparent;
+=======
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+>>>>>>> 5b91f90d25f41871fc3f227bf00417e8457cd3d6
         }
         .btn-outline-danger-custom:hover {
             background: #dc3545;
             color: white;
+<<<<<<< HEAD
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+=======
+            transform: translateY(-1px);
+>>>>>>> 5b91f90d25f41871fc3f227bf00417e8457cd3d6
         }
         .btn-outline-primary-custom {
             border: 2px solid #667eea;
             color: #667eea;
+<<<<<<< HEAD
             padding: 8px 16px;
             border-radius: 8px;
             font-weight: 500;
             transition: all 0.3s ease;
             background: transparent;
+=======
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+>>>>>>> 5b91f90d25f41871fc3f227bf00417e8457cd3d6
         }
         .btn-outline-primary-custom:hover {
             background: #667eea;
             color: white;
+<<<<<<< HEAD
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
         }
@@ -267,11 +360,41 @@
         @keyframes slideIn {
             from { transform: translateX(-100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
+=======
+            transform: translateY(-1px);
+        }
+        .table {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem;
+        }
+        .table td {
+            padding: 1rem;
+            vertical-align: middle;
+        }
+        .badge-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+        .badge-warning {
+            background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+        }
+        .alert-info {
+            background: linear-gradient(135deg, #17a2b8 0%, #6f42c1 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+>>>>>>> 5b91f90d25f41871fc3f227bf00417e8457cd3d6
         }
         .action-buttons {
             display: flex;
             gap: 0.5rem;
         }
+<<<<<<< HEAD
         @media (prefers-reduced-motion: reduce) {
             * {
                 animation-duration: 0.01ms !important;
@@ -279,6 +402,8 @@
                 transition-duration: 0.01ms !important;
             }
         }
+=======
+>>>>>>> 5b91f90d25f41871fc3f227bf00417e8457cd3d6
     </style>
 </head>
 <body>
@@ -351,7 +476,11 @@
                             </thead>
                             <tbody>
                                 {% for reminder in reminders %}
+<<<<<<< HEAD
                                     <tr style="--row-index: {{ loop.index }}">
+=======
+                                    <tr>
+>>>>>>> 5b91f90d25f41871fc3f227bf00417e8457cd3d6
                                         <td><strong>{{ reminder.title }}</strong></td>
                                         <td>{{ reminder.description or '-' }}</td>
                                         <td>{{ reminder.reminder_time }}</td>
@@ -364,10 +493,17 @@
                                         </td>
                                         <td>
                                             <div class="action-buttons">
+<<<<<<< HEAD
                                                 <a href="{{ url_for('reminders.edit_reminder', reminder_id=reminder.id) }}" class="btn btn-outline-primary-custom btn-sm" title="Edit Reminder">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
                                                 <a href="{{ url_for('reminders.delete_reminder', reminder_id=reminder.id) }}" class="btn btn-outline-danger-custom btn-sm" onclick="return confirm('Are you sure you want to delete this reminder?')" title="Delete Reminder">
+=======
+                                                <a href="{{ url_for('reminders.edit_reminder', reminder_id=reminder.id) }}" class="btn btn-outline-primary-custom btn-sm">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="{{ url_for('reminders.delete_reminder', reminder_id=reminder.id) }}" class="btn btn-outline-danger-custom btn-sm" onclick="return confirm('Are you sure you want to delete this reminder?')">
+>>>>>>> 5b91f90d25f41871fc3f227bf00417e8457cd3d6
                                                     <i class="fas fa-trash"></i>
                                                 </a>
                                             </div>
@@ -388,6 +524,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<<<<<<< HEAD
     <script>
         // Add hover effects to action buttons
         document.querySelectorAll('.action-buttons a').forEach(btn => {
@@ -407,5 +544,7 @@
             colorIndex = (colorIndex + 1) % colors.length;
         }, 5000);
     </script>
+=======
+>>>>>>> 5b91f90d25f41871fc3f227bf00417e8457cd3d6
 </body>
 </html>
