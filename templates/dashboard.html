@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            position: relative;
+            overflow-x: hidden;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="80" r="1.5" fill="rgba(255,255,255,0.05)"/><circle cx="40" cy="60" r="0.8" fill="rgba(255,255,255,0.08)"/><circle cx="60" cy="30" r="1.2" fill="rgba(255,255,255,0.06)"/></svg>');
+            pointer-events: none;
+            z-index: -1;
+        }
+        .navbar-custom {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideDown 0.8s ease-out;
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+        .dashboard-container {
+            padding: 2rem 0;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .welcome-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            animation: bounceIn 1.2s ease-out;
+        }
+        .welcome-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shine 3s ease-in-out infinite;
+        }
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 1; transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            animation: fadeInScale 0.8s ease-out both;
+            animation-delay: 0.5s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .card-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 20px 20px 0 0 !important;
+            padding: 1.5rem;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+        .card-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary-custom::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        .btn-primary-custom:hover::before {
+            left: 100%;
+        }
+        .btn-primary-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            filter: brightness(1.1);
+        }
+        .btn-success-custom {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            border: none;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.4s ease;
+        }
+        .btn-success-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.4);
+            filter: brightness(1.1);
+        }
+        .btn-info-custom {
+            background: linear-gradient(135deg, #17a2b8, #6f42c1);
+            border: none;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.4s ease;
+        }
+        .btn-info-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(23, 162, 184, 0.4);
+            filter: brightness(1.1);
+        }
+        .btn-outline-danger-custom {
+            border: 2px solid #dc3545;
+            color: #dc3545;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+        .btn-outline-danger-custom:hover {
+            background: #dc3545;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        }
+        .btn-outline-primary-custom {
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+        .btn-outline-primary-custom:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        .table {
+            border-radius: 15px;
+            overflow: hidden;
+            animation: slideInFromBottom 1s ease-out 0.8s both;
+        }
+        @keyframes slideInFromBottom {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .table th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 1.2rem;
+            font-weight: 600;
+        }
+        .table td {
+            padding: 1.2rem;
+            vertical-align: middle;
+            transition: all 0.3s ease;
+        }
+        .table tbody tr {
+            animation: fadeInLeft 0.6s ease-out both;
+            animation-delay: calc(var(--row-index) * 0.1s);
+        }
+        @keyframes fadeInLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .table tbody tr:hover {
+            background: rgba(102, 126, 234, 0.05);
+            transform: scale(1.01);
+        }
+        .badge-success {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            animation: pulse 2s infinite;
+        }
+        .badge-warning {
+            background: linear-gradient(135deg, #ffc107, #fd7e14);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+        }
+        .alert-info {
+            background: linear-gradient(135deg, #17a2b8, #6f42c1);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            animation: slideIn 0.8s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .stat-card {
+            animation: counter 2s ease-out both;
+            animation-delay: 1s;
+        }
+        @keyframes counter {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .stat-card .card-body h4 {
+            animation: countUp 2s ease-out both;
+            animation-delay: 1.5s;
+        }
+        @keyframes countUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes wiggle {
+            0%, 7% { transform: rotateZ(0); }
+            15% { transform: rotateZ(-15deg); }
+            20% { transform: rotateZ(10deg); }
+            25% { transform: rotateZ(-10deg); }
+            30% { transform: rotateZ(6deg); }
+            35% { transform: rotateZ(-4deg); }
+            40%, 100% { transform: rotateZ(0); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+        <div class="container">
+            <span class="navbar-brand mb-0 h1">
+                <i class="fas fa-bell me-2"></i>Reminder App
+            </span>
+            <div class="d-flex">
+                <span class="navbar-text me-3">
+                    Welcome, <strong>{{ current_user.username }}</strong>
+                </span>
+
+                <a href="{{ url_for('reminders.recycle_bin') }}" class="btn btn-outline-warning btn-sm me-2" title="Recycle Bin">
+                    <i class="fas fa-trash-restore me-1"></i>Recycle Bin
+                </a>
+                <a href="{{ url_for('auth.email_credentials') }}" class="btn btn-outline-info btn-sm me-2" title="Email Credentials">
+                    <i class="fas fa-envelope me-1"></i>Email Credentials
+                </a>
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger btn-sm">
+                    <i class="fas fa-sign-out-alt me-1"></i>Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container dashboard-container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <div class="welcome-card">
+            <h1><i class="fas fa-tachometer-alt me-2"></i>Dashboard</h1>
+            <p class="mb-0">Manage your reminders and stay organized</p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card text-center stat-card">
+                    <div class="card-body">
+                        <i class="fas fa-calendar-alt fa-2x text-primary mb-2" style="animation: bounce 2s infinite;"></i>
+                        <h4 class="card-title">{{ reminders|length }}</h4>
+                        <p class="card-text text-muted">Total Reminders</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center stat-card">
+                    <div class="card-body">
+                        <i class="fas fa-clock fa-2x text-warning mb-2" style="animation: spin 3s linear infinite;"></i>
+                        <h4 class="card-title">{{ reminders|selectattr('is_completed', 'equalto', False)|list|length }}</h4>
+                        <p class="card-text text-muted">Pending</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center stat-card">
+                    <div class="card-body">
+                        <i class="fas fa-check-circle fa-2x text-success mb-2" style="animation: pulse 2s infinite;"></i>
+                        <h4 class="card-title">{{ reminders|selectattr('is_completed', 'equalto', True)|list|length }}</h4>
+                        <p class="card-text text-muted">Completed</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center stat-card">
+                    <div class="card-body">
+                        <i class="fas fa-envelope fa-2x text-info mb-2" style="animation: wiggle 1s ease-in-out infinite;"></i>
+                        <h4 class="card-title">{{ reminders|selectattr('recipient_email')|list|length }}</h4>
+                        <p class="card-text text-muted">With Email</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Tips -->
+        <div class="alert alert-info" role="alert">
+            <h5><i class="fas fa-lightbulb me-2"></i>Quick Tips:</h5>
+            <ul class="mb-0">
+                <li>Create reminders with specific times to get notified</li>
+                <li>Set recipient email to send reminders to others</li>
+                <li>Use CSV import/export to manage reminders in bulk</li>
+                <li>Configure email settings to enable reminder notifications</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="mb-0"><i class="fas fa-list me-2"></i>Your Reminders</h2>
+            </div>
+            <div class="card-body">
+                <div class="d-flex gap-2 mb-4 flex-wrap">
+                    <a href="{{ url_for('reminders.create_reminder') }}" class="btn btn-primary-custom">
+                        <i class="fas fa-plus me-2"></i>Create New Reminder
+                    </a>
+                    <a href="{{ url_for('reminders.export_reminders') }}" class="btn btn-success-custom">
+                        <i class="fas fa-download me-2"></i>Export to CSV
+                    </a>
+                    <a href="{{ url_for('reminders.import_reminders') }}" class="btn btn-info-custom">
+                        <i class="fas fa-upload me-2"></i>Import from CSV
+                    </a>
+                    {% if reminders %}
+                    <form method="POST" action="{{ url_for('reminders.delete_all_reminders') }}" class="d-inline" onsubmit="return confirm('Are you sure you want to delete ALL reminders? This action cannot be undone.')">
+                        <button type="submit" class="btn btn-outline-danger-custom">
+                            <i class="fas fa-trash-alt me-2"></i>Delete All Reminders
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+                
+                {% if reminders %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Reminder Time</th>
+                                    <th>Recipient Email</th>
+                                    <th>Created</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for reminder in reminders %}
+                                    <tr style="--row-index: {{ loop.index }}">
+                                        <td><strong>{{ reminder.title }}</strong></td>
+                                        <td>{{ reminder.description or '-' }}</td>
+                                        <td>{{ reminder.reminder_time }}</td>
+                                        <td>{{ reminder.recipient_email or 'Your email' }}</td>
+                                        <td>{{ reminder.created_at }}</td>
+                                        <td>
+                                            <span class="badge {% if reminder.is_completed %}badge-success{% else %}badge-warning{% endif %}">
+                                                {% if reminder.is_completed %}Completed{% else %}Pending{% endif %}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <a href="{{ url_for('reminders.edit_reminder', reminder_id=reminder.id) }}" class="btn btn-outline-primary-custom btn-sm" title="Edit Reminder">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a href="{{ url_for('reminders.delete_reminder', reminder_id=reminder.id) }}" class="btn btn-outline-danger-custom btn-sm" onclick="return confirm('Are you sure you want to move this reminder to recycle bin?')" title="Move to Recycle Bin">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">No reminders found. Create your first reminder or import from CSV.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Counter animation for statistics
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-card .card-title');
+            counters.forEach(counter => {
+                const target = parseInt(counter.innerText);
+                let count = 0;
+                const increment = target / 100;
+                const timer = setInterval(() => {
+                    count += increment;
+                    counter.innerText = Math.floor(count);
+                    if (count >= target) {
+                        counter.innerText = target;
+                        clearInterval(timer);
+                    }
+                }, 20);
+            });
+        }
+
+        // Trigger counter animation when page loads
+        window.addEventListener('load', () => {
+            setTimeout(animateCounters, 1500);
+        });
+
+        // Add hover effects to action buttons
+        document.querySelectorAll('.action-buttons a').forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.1)';
+            });
+            btn.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+
+        // Dynamic background color cycling
+        let colorIndex = 0;
+        const colors = ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe', '#00f2fe'];
+        setInterval(() => {
+            document.body.style.setProperty('--accent-color', colors[colorIndex]);
+            colorIndex = (colorIndex + 1) % colors.length;
+        }, 5000);
+    </script>
+</body>
+</html>

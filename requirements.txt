@@ -1,0 +1,10 @@
+flask
+flask-login
+flask-mail
+itsdangerous
+apscheduler
+email-validator
+python-dotenv
+gunicorn
+pymongo
+sendgrid
